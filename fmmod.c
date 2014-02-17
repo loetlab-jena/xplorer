@@ -12,14 +12,14 @@
 
 void usage(void)
 {
-    printf("Usage: fmmod inputfile outputfile [carrier] [freqdev]\n \
+    printf("Usage: fmmod inputfile outputfile [carrier] [freqdev] [volume]\n \
             inputfile: path to input file(needs to be single channel)\n \
             outputfile: path to output file\n \
             carrier: carrier frequency in Hz(standard: 0.0)\n \
             freqdev: frequency deviation in Hz(standard: 3000)\n");
 }
 
-void process_data(double *data, int count, int fs, double fc, double freqdev)
+void process_data(double *data, int count, int fs, double fc, double freqdev, double gain)
 {
     static double old_phase = 0.0;
     double cumsum[BUFFER_LEN];
@@ -36,8 +36,8 @@ void process_data(double *data, int count, int fs, double fc, double freqdev)
 
     for (i=0; i < count; i++) {
         phase = 2*M_PI*fc/fs*(i+1) + 2*M_PI*freqdev*cumsum[i] + old_phase;
-        data[2*i] = cos(phase);
-        data[2*i + 1] = -sin(phase);
+        data[2*i] = gain * cos(phase);
+        data[2*i + 1] = - gain * sin(phase);
     }
 
     old_phase = fmod(phase, 2*M_PI);
@@ -52,15 +52,16 @@ int main(int argc, char *argv[])
     int readcount;
     double carrier;
     double freqdev;
+    double gain;
 
-    if ((argc > 5) || (argc < 3)) {
+    if ((argc > 6) || (argc < 3)) {
         usage();
         return 1;
     }
 
     freqdev = (argc == 5) ? atof(argv[4]) : 3000.0;
     carrier = (argc > 3) ? atof(argv[3]) : 0.0;
-
+    gain = (argc == 6) ? atof(argv[5]) : 1.0;
     infile = sf_open(argv[1], SFM_READ, &sfinfo);
     if (!infile) {
         printf("%s: Not able to open input file %s\n", argv[0], argv[1]);
