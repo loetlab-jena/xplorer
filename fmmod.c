@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
     }
 
     while ((readcount = sf_read_double(infile, data, BUFFER_LEN))) {
-        process_data(data, readcount, sfinfo.samplerate, carrier, freqdev);
+        process_data(data, readcount, sfinfo.samplerate, carrier, freqdev, gain);
         sf_write_double(outfile, data, 2*readcount);
     }
 
