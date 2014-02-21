@@ -22,8 +22,6 @@ fs = 44100
 fmark = 1200
 fspace = 2200
 baud = 1200
-outfile = "out.wav"
-
 
 def hdlc_encode(datastring):
 	# add HDLC information
