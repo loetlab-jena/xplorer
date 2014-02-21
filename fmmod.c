@@ -79,6 +79,12 @@ int main(int argc, char *argv[])
         printf("%s: Not able to process more than 1 channel\n", argv[0]);
         return 1;
     }
+    
+    if (abs(carrier) + abs(freqdev) >= sfinfo.samplerate / 2.0) {
+        printf("%s: Given carrier frequency, frequency deviation and samplerate \
+                are not able to comply with nyquist criterion\n", argv[0]);
+        return 1;
+    }
 
     sfinfo.channels = 2;
 
