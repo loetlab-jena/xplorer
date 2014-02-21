@@ -18,4 +18,4 @@ Usage: fmmod inputfile outputfile [carrier] [freqdev] [gain]
 
 command for compiling:
 
-gcc fmmod.c -lsndfile -lm -ofmmod -Wall
+make fmmod
