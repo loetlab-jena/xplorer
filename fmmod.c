@@ -86,8 +86,7 @@ int main(int argc, char *argv[])
     }
     
     if (abs(carrier) + abs(freqdev) >= sfinfo.samplerate / 2.0) {
-        printf("%s: Given carrier frequency, frequency deviation and samplerate \
-                are not able to comply with nyquist criterion\n", argv[0]);
+        printf("%s: Given carrier frequency, frequency deviation and samplerate are not able to comply with nyquist criterion\n", argv[0]);
         return 1;
     }
 
