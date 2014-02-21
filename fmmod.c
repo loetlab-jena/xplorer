@@ -67,9 +67,9 @@ int main(int argc, char *argv[])
     freqdev = (argc == 5) ? atof(argv[4]) : 3000.0;
     carrier = (argc > 3) ? atof(argv[3]) : 0.0;
     igain = qgain = (argc == 6) ? atof(argv[5]) : 1.0;
-    igain = (argc > 6) ? atof(argv[5]) : 1.0;
-    qgain = (argc > 6) ? atof(argv[6]) : 1.0;
-    phaseoffset = (argc == 8) ? atof(argv[7])/(2.0*M_PI) : M_PI/2.0;
+    igain = (argc > 6) ? atof(argv[5]) : igain;
+    qgain = (argc > 6) ? atof(argv[6]) : qgain;
+    phaseoffset = (argc == 8) ? atof(argv[7])/360.0*(2.0*M_PI) : M_PI/2.0;
     
     if (freqdev < 0.0) {
         printf("%s: negative frequency deviation is unsupported\n", argv[0]);
