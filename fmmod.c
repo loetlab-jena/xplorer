@@ -11,15 +11,18 @@
 
 void usage(void)
 {
-    printf("Usage: fmmod inputfile outputfile [carrier] [freqdev] [gain]\n \
+    printf("Usage: fmmod inputfile outputfile [carrier] [freqdev] [gain | igain qgain [phaseoffset]]\n \
             inputfile: path to input file(needs to be single channel)\n \
             outputfile: path to output file\n \
             carrier: carrier frequency in Hz(standard: 0.0)\n \
             freqdev: frequency deviation in Hz(standard: 3000)\n \
-            gain: factor for amplification of modulated signal(0.0 < gain < 1.0)\n");
+            gain: amplification of both modulated signals(0.0 < gain < 1.0)\n \
+            igain: amplification of modulated inphase signal\n \
+            qgain: amplification of modulated quadrature signal\n \
+            phaseoffset: phase offset between inphase and quadrature signal in degrees(standard: 90°)\n");
 }
 
-void process_data(double *data, int count, int fs, double fc, double freqdev, double gain)
+void process_data(double *data, int count, int fs, double fc, double freqdev, double igain, double qgain, double phaseoffset)
 {
     static double old_phase = 0.0;
     double cumsum[BUFFER_LEN];
@@ -36,8 +39,8 @@ void process_data(double *data, int count, int fs, double fc, double freqdev, do
 
     for (i=0; i < count; i++) {
         phase = 2*M_PI*fc/fs*(i+1) + 2*M_PI*freqdev*cumsum[i] + old_phase;
-        data[2*i] = gain * cos(phase);
-        data[2*i + 1] = - gain * sin(phase);
+        data[2*i] = igain * sin(phase + phaseoffset);
+        data[2*i + 1] = - qgain * sin(phase);
     }
 
     old_phase = fmod(phase, 2*M_PI);
@@ -52,24 +55,34 @@ int main(int argc, char *argv[])
     int readcount;
     double carrier;
     double freqdev;
-    double gain;
+    double igain;
+    double qgain;
+    double phaseoffset;
 
-    if ((argc > 6) || (argc < 3)) {
+    if ((argc > 7) || (argc < 3)) {
         usage();
         return 1;
     }
 
     freqdev = (argc == 5) ? atof(argv[4]) : 3000.0;
     carrier = (argc > 3) ? atof(argv[3]) : 0.0;
-    gain = (argc == 6) ? atof(argv[5]) : 1.0;
+    igain = qgain = (argc == 6) ? atof(argv[5]) : 1.0;
+    igain = (argc > 6) ? atof(argv[5]) : 1.0;
+    qgain = (argc > 6) ? atof(argv[6]) : 1.0;
+    phaseoffset = (argc == 8) ? atof(argv[7])/(2.0*M_PI) : M_PI/2.0;
     
     if (freqdev < 0.0) {
         printf("%s: negative frequency deviation is unsupported\n", argv[0]);
         return 1;
     }
     
-    if ((gain < 0.0) || (gain > 1.0)) {
-        printf("%s: gain parameter is outside of range(0.0..1.0)\n", argv[0]);
+    if ((igain < 0.0) || (igain > 1.0)) {
+        printf("%s: inphase gain parameter is outside of range(0.0..1.0)\n", argv[0]);
+        return 1;
+    }
+    
+    if ((qgain < 0.0) || (qgain > 1.0)) {
+        printf("%s: quadrature gain parameter is outside of range(0.0..1.0)\n", argv[0]);
         return 1;
     }
     
@@ -100,7 +113,7 @@ int main(int argc, char *argv[])
     }
 
     while ((readcount = sf_read_double(infile, data, BUFFER_LEN))) {
-        process_data(data, readcount, sfinfo.samplerate, carrier, freqdev, gain);
+        process_data(data, readcount, sfinfo.samplerate, carrier, freqdev, igain, qgain, phaseoffset);
         sf_write_double(outfile, data, 2*readcount);
     }
 
