@@ -1,6 +1,5 @@
 /* complex frequency modulator for i/q signal processing
  * Sebastian Weiss <dl3yc@darc.de>
- * Di 4. Feb 16:10:01 CET 2014
  */
 
 #include <stdio.h>
@@ -12,11 +11,12 @@
 
 void usage(void)
 {
-    printf("Usage: fmmod inputfile outputfile [carrier] [freqdev] [volume]\n \
+    printf("Usage: fmmod inputfile outputfile [carrier] [freqdev] [gain]\n \
             inputfile: path to input file(needs to be single channel)\n \
             outputfile: path to output file\n \
             carrier: carrier frequency in Hz(standard: 0.0)\n \
-            freqdev: frequency deviation in Hz(standard: 3000)\n");
+            freqdev: frequency deviation in Hz(standard: 3000) \
+            gain: factor for amplification of modulated signal(0.0 < gain < 1.0)\n");
 }
 
 void process_data(double *data, int count, int fs, double fc, double freqdev, double gain)
@@ -62,6 +62,12 @@ int main(int argc, char *argv[])
     freqdev = (argc == 5) ? atof(argv[4]) : 3000.0;
     carrier = (argc > 3) ? atof(argv[3]) : 0.0;
     gain = (argc == 6) ? atof(argv[5]) : 1.0;
+    
+    if ((gain < 0.0) || (gain > 1.0)) {
+        printf("%s: gain parameter is outside of range(0.0..1.0)\n", argv[0]);
+        return 1;
+    }
+    
     infile = sf_open(argv[1], SFM_READ, &sfinfo);
     if (!infile) {
         printf("%s: Not able to open input file %s\n", argv[0], argv[1]);
