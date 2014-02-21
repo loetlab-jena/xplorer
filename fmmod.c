@@ -15,7 +15,7 @@ void usage(void)
             inputfile: path to input file(needs to be single channel)\n \
             outputfile: path to output file\n \
             carrier: carrier frequency in Hz(standard: 0.0)\n \
-            freqdev: frequency deviation in Hz(standard: 3000) \
+            freqdev: frequency deviation in Hz(standard: 3000)\n \
             gain: factor for amplification of modulated signal(0.0 < gain < 1.0)\n");
 }
 
