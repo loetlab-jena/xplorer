@@ -63,6 +63,11 @@ int main(int argc, char *argv[])
     carrier = (argc > 3) ? atof(argv[3]) : 0.0;
     gain = (argc == 6) ? atof(argv[5]) : 1.0;
     
+    if (freqdev < 0.0) {
+        printf("%s: negative frequency deviation is unsupported\n", argv[0]);
+        return 1;
+    }
+    
     if ((gain < 0.0) || (gain > 1.0)) {
         printf("%s: gain parameter is outside of range(0.0..1.0)\n", argv[0]);
         return 1;
