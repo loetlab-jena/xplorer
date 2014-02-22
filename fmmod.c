@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     double qgain;
     double phaseoffset;
 
-    if ((argc > 7) || (argc < 3)) {
+    if ((argc > 8) || (argc < 3)) {
         usage();
         return 1;
     }
