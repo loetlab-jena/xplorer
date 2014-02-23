@@ -8,6 +8,7 @@
 import threading
 import queue
 import time
+import logging
 
 class Transmitter(threading.Thread):
 	TXQueue = queue.Queue()
@@ -15,8 +16,12 @@ class Transmitter(threading.Thread):
 	def run(self):
 		while True: 
 			transmission = Transmitter.TXQueue.get()
-			print("Filename: " + transmission[0] + "\tFrequency: "+transmission[1])
+			logging.info("TX File TX started: Filename: " + transmission[0] + "\tFrequency: "+transmission[1])
+			# TODO check for existence of file, abort if not found
+			# TODO activate PA
 			# TODO set LO frequency
 			# TODO play the audio file
-			time.sleep(1)
+			# TODO deactivate LO and PA
+			time.sleep(5)
+			logging.info("TX File TX finished")
 			Transmitter.TXQueue.task_done()
