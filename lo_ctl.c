@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
         state = 1;
     }
     else if(argv[1] == "off") {
-        state = 0
+        state = 0;
     }
     else {
         usage();
