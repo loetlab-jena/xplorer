@@ -19,3 +19,15 @@ Usage: fmmod inputfile outputfile [carrier] [freqdev] [gain]
 command for compiling:
 
 make fmmod
+
+missionctl
+==========
+
+connects the various modules to implement the actual mission schedule. it takes pictures from the camera, 
+converts them to the format used by sstv, generates the SSTV and APRS signals, controls the release etc
+
+transmitter
+===========
+
+implements a workqueue on the raspberry pi for files to send. with this logic, missionctl doesn't have to keep track
+on transmitting files but instead just tells the workqueue to send a file as soon as the RF is free
