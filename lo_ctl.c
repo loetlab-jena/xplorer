@@ -120,10 +120,10 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    if(argv[1] == "on") {
+    if(strcmp(argv[1],"on") == 0) {
         state = 1;
     }
-    else if(argv[1] == "off") {
+    else if(strcmp(argv[1],"off") == 0) {
         state = 0;
     }
     else {
