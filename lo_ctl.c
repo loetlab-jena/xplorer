@@ -1,7 +1,7 @@
-/* complex frequency modulator for i/q signal processing
-* Sebastian Weiss <dl3yc@darc.de>
-* heavily based on PiFM(http://www.icrobotics.co.uk/wiki/index.php/Turning_the_Raspberry_Pi_Into_an_FM_Transmitter)
-*/
+/* controller for local oscillator(GPCLK0)
+ * Sebastian Weiss <dl3yc@darc.de>
+ * heavily based on PiFM(http://www.icrobotics.co.uk/wiki/index.php/Turning_the_Raspberry_Pi_Into_an_FM_Transmitter)
+ */
 
 #include <stdio.h>
 #include <string.h>
