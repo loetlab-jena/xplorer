@@ -11,7 +11,7 @@ import logging
 
 # initate logging
 logging.basicConfig(filename='xplorer.log', format='%(asctime)s %(levelname)s\t%(message)s', filemode='w', level=logging.DEBUG)
-logging.info("MC\tXplorer25 Software starting..")
+logging.info("MC Xplorer25 Software starting..")
 
 # setup the transmitter thread
 txthread = Transmitter()
