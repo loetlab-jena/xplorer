@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # the mission control module
 #
 # Handles the whole flight by connecting the various modules 
@@ -6,6 +6,7 @@
 # 
 
 from transmitter import Transmitter
+from gpslistener import GPSListener
 import time
 import logging
 
@@ -17,6 +18,11 @@ logging.info("MC Xplorer25 Software starting..")
 txthread = Transmitter()
 txthread.setDaemon(True)
 txthread.start()
+
+# setup the GPS-listener thread
+gpsthread = GPSListener()
+gpsthread.setDaemon(True)
+gpsthread.start()
 
 time.sleep(1)
 logging.info("MC APRS und Ansage queued")

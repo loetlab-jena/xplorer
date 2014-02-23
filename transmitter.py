@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # The RF-Control module
 #
 # Stefan Biereigel
@@ -6,12 +6,12 @@
 # Implements a thread and workqueue where any file to be transmitted and the corresponding frequency can be input. 
 
 import threading
-import queue
+import Queue
 import time
 import logging
 
 class Transmitter(threading.Thread):
-	TXQueue = queue.Queue()
+	TXQueue = Queue.Queue()
 
 	def run(self):
 		while True: 
@@ -21,7 +21,8 @@ class Transmitter(threading.Thread):
 			# TODO activate PA
 			# TODO set LO frequency
 			# TODO play the audio file
-			# TODO deactivate LO and PA
+			# TODO if queue empty
+				# TODO deactivate LO and PA
 			time.sleep(5)
 			logging.info("TX File TX finished")
 			Transmitter.TXQueue.task_done()
