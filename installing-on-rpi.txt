@@ -1,0 +1,14 @@
+This document includes the neccesary modifications to a default raspian image
+These will have to be done manually to run the balloon mission software without errors. Maybe this will go into a script sometime later..
+
+The following software is needed from packet sources:
+	resample
+	convert (ImageMagick)
+	i2c-tools
+	i2c-dev
+	gpsd
+
+The following configuration has to be done:
+	TODO load i2c-modules on boot, export i2c lm75
+	TODO configure GPSd / gpsfake
+	TODO enable the camera
