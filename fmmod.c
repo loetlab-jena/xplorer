@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    freqdev = (argc == 5) ? atof(argv[4]) : 3000.0;
+    freqdev = (argc > 4) ? atof(argv[4]) : 3000.0;
     carrier = (argc > 3) ? atof(argv[3]) : 0.0;
     igain = qgain = (argc == 6) ? atof(argv[5]) : 1.0;
     igain = (argc > 6) ? atof(argv[5]) : igain;
