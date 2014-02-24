@@ -10,9 +10,25 @@ from gpslistener import GPSListener
 import time
 import logging
 
+# import the GPIO modules only if we're running on a raspberry pi
+pi = 1
+try:
+	import RPi.GPIO as GPIO
+except ImportError:
+	pi = 0;
+
+LED = 21
+
 # initate logging
 logging.basicConfig(filename='xplorer.log', format='%(asctime)s %(levelname)s\t%(message)s', filemode='w', level=logging.DEBUG)
 logging.info("MC Xplorer25 Software starting..")
+if pi == 1:
+	logging.debug("MC running on RPi, initialising GPIO")
+	GPIO.setmode(GPIO.BOARD)
+	GPIO.setup(LED, GPIO.OUT) # status LED
+	GPIO.output(LED, GPIO.HIGH) # switch on to indicate software startup
+else:
+	logging.debug("MC running NOT on RPi")
 
 # setup the transmitter thread
 txthread = Transmitter()
@@ -23,6 +39,20 @@ txthread.start()
 gpsthread = GPSListener()
 gpsthread.setDaemon(True)
 gpsthread.start()
+
+# wait for at least a 2D-Fix from the GPS
+while GPSListener.fix < 2:
+	pass
+
+# indicate GPS fix on LED (blinking)
+if pi == 1:
+	for i in range(1,60):
+		GPIO.out(LED, GPIO.HIGH)
+		time.sleep(1)
+		GPIO.out(LED, GPIO.LOW)
+		time.sleep(1)
+else:
+	logging.debug("MC GPS fix OK")
 
 time.sleep(1)
 logging.info("MC APRS und Ansage queued")

@@ -17,6 +17,8 @@ class GPSListener(threading.Thread):
 	fix = 0
 
 	def run(self):
+		logging.info("GP GPS Listener started")
+		logging.debug("GP connecting to GPSd")
 		gpsok = 0
 		while gpsok == 0:
 			try:
@@ -25,6 +27,7 @@ class GPSListener(threading.Thread):
 			except Exception:
 				logging.warn("GL Could not connect to GPSd .. retrying")
 				time.sleep(3)
+		logging.debug("GP connected to GPSd")
 		for report in gpsd:
 			GPSListener.lat = gpsd.fix.latitude
 			GPSListener.lon = gpsd.fix.longitude
