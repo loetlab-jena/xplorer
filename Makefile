@@ -2,7 +2,7 @@ OBJ=fmmod.o robot36.o loctl.o
 BIN=fmmod robot36 loctl
 LIBS=-lsndfile -ljpeg -lm
 
-all: robot36 fmmod loctl
+all: $(BIN)
 
 robot36: robot36.o 
 	$(CC) -orobot36 robot36.o $(LIBS)
