@@ -134,6 +134,7 @@ int main(int argc, char *argv[])
     frequency = (argc > 2) ? atof(argv[2]) : 0.0;
     strength = (argc = 4) ? atof(argv[3]) : 8;
 
+#ifdef __arm__
     if ((mem_fd = open("/dev/mem", O_RDWR|O_SYNC) ) < 0) {
         printf("%s: can't open /dev/mem, try it as root\n", argv[0]);
         return 1;
@@ -168,5 +169,6 @@ int main(int argc, char *argv[])
     txctl(state, strength);
     // TODO: convert frequency to DIVI and DIVF + function/macro setfreq(divi,divf)
     ACCESS(CM_GP0DIV) = (0x5a << 24) | (6 << 12) | (896<<2); // 6, 928 für aprs 144,796; 6, 912 für 145,125; 6, 896 für 145,450
+#endif    
     return 0;
 }
