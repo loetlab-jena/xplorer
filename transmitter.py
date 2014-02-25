@@ -15,7 +15,7 @@ pi = 1
 try:
 	import RPi.GPIO as GPIO
 except ImportError:
-	pi = 0;
+	import gpio_dummy as GPIO
 
 RF_ENBL = 22
 
@@ -29,13 +29,11 @@ class Transmitter(threading.Thread):
 		while True: 
 			transmission = Transmitter.TXQueue.get()
 			logging.info("TX File TX started: Filename: " + transmission[0] + "\tFrequency: "+transmission[1])
-			if pi == 1:
-				GPIO.output(RF_ENBL, GPIO.HIGH)
+			GPIO.output(RF_ENBL, GPIO.HIGH)
 			# TODO set LO frequency
 			# TODO play the audio file
 			# TODO this needs checking: is empty() only valid after we do task_done()?
-			if Transmitter.TXQueue.empty() and pi == 1:
-				GPIO.output(RF_ENBL, GPIO.LOW)
+			GPIO.output(RF_ENBL, GPIO.LOW)
 			time.sleep(5) # TODO remove this, just for testing purposes
 			logging.info("TX File TX finished")
 			Transmitter.TXQueue.task_done()

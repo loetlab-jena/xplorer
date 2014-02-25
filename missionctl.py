@@ -15,6 +15,7 @@ pi = 1
 try:
 	import RPi.GPIO as GPIO
 except ImportError:
+	import gpio_dummy as GPIO
 	pi = 0;
 
 LED = 21
@@ -23,12 +24,13 @@ LED = 21
 logging.basicConfig(filename='xplorer.log', format='%(asctime)s %(levelname)s\t%(message)s', filemode='w', level=logging.DEBUG)
 logging.info("MC Xplorer25 Software starting..")
 if pi == 1:
-	logging.debug("MC running on RPi, initialising GPIO")
-	GPIO.setmode(GPIO.BOARD)
-	GPIO.setup(LED, GPIO.OUT) # status LED
-	GPIO.output(LED, GPIO.HIGH) # switch on to indicate software startup
+	logging.debug("MC running on RPi")
 else:
 	logging.debug("MC running NOT on RPi")
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(LED, GPIO.OUT) # status LED
+GPIO.output(LED, GPIO.HIGH) # switch on to indicate software startup
 
 # setup the transmitter thread
 txthread = Transmitter()
@@ -45,14 +47,13 @@ while GPSListener.fix < 2:
 	pass
 
 # indicate GPS fix on LED (blinking)
-if pi == 1:
-	for i in range(1,60):
-		GPIO.out(LED, GPIO.HIGH)
-		time.sleep(1)
-		GPIO.out(LED, GPIO.LOW)
-		time.sleep(1)
-else:
-	logging.debug("MC GPS fix OK")
+for i in range(1,60):
+	GPIO.output(LED, GPIO.HIGH)
+	time.sleep(1)
+	GPIO.output(LED, GPIO.LOW)
+	time.sleep(1)
+
+logging.info("MC GPS fix OK")
 
 time.sleep(1)
 logging.info("MC APRS und Ansage queued")
