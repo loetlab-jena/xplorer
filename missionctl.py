@@ -119,10 +119,10 @@ while flight == 1:
 		loopcnt = 0
 		ascending = 0
 	time_en = time.time()
-	time_delta = 60 - time_en - time_st
+	time_delta = 60 - (time_en - time_st)
 	if time_delta > 0:
 		logging.debug("MC waiting %f seconds till next loop" % time_delta)
-		time.sleep(time_en - time_st)
+		time.sleep(time_delta)
 	else:
 		logging.debug("MC loop took longer that 1 minute!")
 
@@ -135,10 +135,10 @@ while loopcnt < STANDBY_LOOPS:
 	Transmitter.TXQueue.put(["aprs.wav", "145.200"])
 	Transmitter.TXQueue.join()
 	time_en = time.time()
-	time_delta = 180 - time_en - time_st
+	time_delta = 180 - (time_en - time_st)
 	if time_delta > 0:
 		logging.debug("MC waiting %f seconds till next loop" % time_delta)
-		time.sleep(time_en - time_st)
+		time.sleep(time_delta)
 	else:
 		logging.debug("MC loop took longer that 3 minutes!")
 
