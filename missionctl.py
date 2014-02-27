@@ -23,8 +23,8 @@ except ImportError:
 	import gpio_dummy as GPIO
 	pi = 0;
 
-LED = 21
-RELEASE = 23
+LED = 17
+RELEASE = 27
 
 # helper functions
 

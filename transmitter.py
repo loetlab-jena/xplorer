@@ -17,7 +17,7 @@ try:
 except ImportError:
 	import gpio_dummy as GPIO
 
-RF_ENBL = 22
+RF_ENBL = 18
 
 class Transmitter(threading.Thread):
 	TXQueue = Queue.Queue()
