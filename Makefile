@@ -1,17 +1,16 @@
-OBJ=fmmod.o robot36.o loctl.o
 BIN=fmmod robot36 loctl
 LIBS=-lsndfile -ljpeg -lm
 
 all: $(BIN)
 
-robot36: robot36.o 
-	$(CC) -orobot36 robot36.o $(LIBS)
+robot36: 
+	$(CC) -orobot36 robot36.c $(LIBS)
 
-fmmod: fmmod.o
-	$(CC) -ofmmod fmmod.o $(LIBS)
+fmmod: 
+	$(CC) -ofmmod fmmod.c $(LIBS)
 
-loctl: loctl.o
-	$(CC) -oloctl loctl.o
+loctl: 
+	$(CC) -oloctl loctl.c
 
 .PHONY: clean
 clean:
