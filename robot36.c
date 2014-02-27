@@ -207,7 +207,8 @@ ScanlinePair(Image img, HalfImage halfimg, int y)
 int
 main(int argc, char *argv[])
 {
-    char *fname = "wally.jpg" ;
+	// TODO: Input and output filename must be variable!!
+    char *fname = "sstv.jpg" ;
     int y, i, j, c ;
     HalfImage halfimage ;
 
