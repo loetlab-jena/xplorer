@@ -16,3 +16,4 @@ loctl: loctl.o
 .PHONY: clean
 clean:
 	rm -f $(BIN) $(OBJ)
+	rm -f *.jpg *.wav
