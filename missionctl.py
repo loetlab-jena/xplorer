@@ -11,7 +11,7 @@ STANDBY_LOOPS = 2	# each is three minutes
 
 from transmitter import Transmitter
 from gpslistener import GPSListener
-import hfmod
+import rfmod
 import time
 import logging
 
