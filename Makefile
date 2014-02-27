@@ -16,3 +16,4 @@ loctl:
 clean:
 	rm -f $(BIN) $(OBJ)
 	rm -f *.jpg *.wav
+	rm -f *.log

@@ -24,6 +24,7 @@ except ImportError:
 	pi = 0;
 
 LED = 21
+RELEASE = 23
 
 # helper functions
 
@@ -31,6 +32,9 @@ def release_payload():
 	logging.info("MC releasing the payload")
 	Transmitter.TXQueue.put(["warn.wav", "145.200"])
 	# TODO do the actual relase
+	GPIO.out(RELEASE, GPIO.HIGH)
+	time.sleep(1)
+	GPIO.out(RELEASE, GPIO.LOW)
 
 def queue_numbers(value):
 	# TODO use the values as done in "count"
@@ -50,6 +54,8 @@ else:
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(LED, GPIO.OUT) # status LED
 GPIO.output(LED, GPIO.HIGH) # switch on to indicate software startup
+GPIO.setup(RELEASE, GPIO.OUT) # release pin
+GPIO.output(RELEASE, GPIO.LOW) # disable release
 
 # setup the transmitter thread
 txthread = Transmitter()
@@ -87,19 +93,19 @@ while flight == 1:
 	if sstv_file == 1:
 		sstv_file = 2
 		Transmitter.TXQueue.put(["sstv1.wav", "145.200"])
-		hfmod.sstv("image.png", "sstv2.wav")
+		rfmod.sstv("image.jpg", "sstv2.wav")
 	else:
 		sstv_file = 1
 		Transmitter.TXQueue.put(["sstv2.wav", "145.200"])
-		hfmod.sstv("image.png", "sstv1.wav")
+		rfmod.sstv("image.jpg", "sstv1.wav")
 	
 	# get lan/lot/alt from gps
 	tmp_lat = GPSListener.lat
 	tmp_lon = GPSListener.lon
 	tmp_alt = GPSListener.alt
 	# TODO check numbers for nan etc
-	hfmod.aprs(tmp_lat, tmp_lon, tmp_alt, "aprs.wav")
-	Transmitter.TXQueue.put(["aprs.wav", "145.200"])
+	rfmod.aprs(tmp_lat, tmp_lon, tmp_alt)
+	Transmitter.TXQueue.put(["aprs_fmmod.wav", "145.200"])
 	# queue numbers
 	queue_numbers(tmp_lat)
 	queue_numbers(tmp_lon)
@@ -131,8 +137,8 @@ logging.info("MC Stopping SSTV TX, entering Standby")
 while loopcnt < STANDBY_LOOPS:
 	loopcnt = loopcnt + 1
 	time_st = time.time()
-	hfmod.aprs(tmp_lat, tmp_lon, tmp_alt, "aprs.wav")
-	Transmitter.TXQueue.put(["aprs.wav", "145.200"])
+	rfmod.aprs(tmp_lat, tmp_lon, tmp_alt)
+	Transmitter.TXQueue.put(["aprs_fmmod.wav", "145.200"])
 	Transmitter.TXQueue.join()
 	time_en = time.time()
 	time_delta = 180 - (time_en - time_st)
