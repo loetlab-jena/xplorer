@@ -51,7 +51,7 @@ if pi == 1:
 else:
 	logging.debug("MC running NOT on RPi")
 
-GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BCM)
 GPIO.setup(LED, GPIO.OUT) # status LED
 GPIO.output(LED, GPIO.HIGH) # switch on to indicate software startup
 GPIO.setup(RELEASE, GPIO.OUT) # release pin

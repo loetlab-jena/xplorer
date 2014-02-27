@@ -31,9 +31,8 @@ class Transmitter(threading.Thread):
 			logging.info("TX File TX started: Filename: " + transmission[0] + "\tFrequency: "+transmission[1])
 			GPIO.output(RF_ENBL, GPIO.HIGH)
 			# TODO set LO frequency
-			# TODO play the audio file
+			os.system('aplay -D hw:1,0 %s' % transmission[0])
 			# TODO this needs checking: is empty() only valid after we do task_done()?
 			GPIO.output(RF_ENBL, GPIO.LOW)
-			time.sleep(5) # TODO remove this, just for testing purposes
 			logging.info("TX File TX finished")
 			Transmitter.TXQueue.task_done()

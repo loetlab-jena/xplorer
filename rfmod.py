@@ -12,8 +12,8 @@ def fmmod(in_fname, out_fname, fc):
 	pass
 
 def aprs(lat, lon, alt):
-	os.system('./afsk-encoder.py %s %s %s aprs_enc.wav' % (str(lat), str(lon), str(alt)))
-	os.system('resample -to 48000 aprs_enc.wav aprs_resamp.wav')
+	os.system('./afsk-encoder.py %s %s %s aprs.wav' % (str(lat), str(lon), str(alt)))
+	os.system('resample -to 48000 aprs.wav aprs_resamp.wav')
 	fmmod('aprs_resamp.wav', 'aprs_fmmod.wav', 5000)
 	pass
 
