@@ -35,7 +35,7 @@ typedef float HalfImage[HALFHEIGHT][HALFWIDTH][3] ;
 Image image ;
 
 int
-ReadImage(char *fname, Image img) 
+ReadImage(char *ifname, Image img) 
 {
     FILE *inp ;
     struct jpeg_decompress_struct cinfo;
@@ -44,8 +44,8 @@ ReadImage(char *fname, Image img)
     JSAMPARRAY buffer ;
 
 
-    if ((inp = fopen(fname, "rb")) == NULL) {
-	fprintf(stderr, "can't open %s\n", fname);
+    if ((inp = fopen(ifname, "rb")) == NULL) {
+	fprintf(stderr, "can't open %s\n", ifname);
 	return 0;
     }
 
@@ -204,16 +204,27 @@ ScanlinePair(Image img, HalfImage halfimg, int y)
 
 }
 
+void
+usage(void) {
+    printf("Usage: robot36 inputfile outputfile\n");
+}
+
 int
 main(int argc, char *argv[])
 {
-	// TODO: Input and output filename must be variable!!
-    char *fname = "sstv.jpg" ;
+    char *ifname;
+    char *ofname;
     int y, i, j, c ;
+    if (argc != 3) {
+	    usage();
+	    return 1;
+    }
+    ifname = argv[1];
+    ofname = argv[2];
     HalfImage halfimage ;
 
-    if (ReadImage(fname, image))
-	fprintf(stderr, "%s read successfully.\n", fname) ;
+    if (ReadImage(ifname, image))
+	fprintf(stderr, "%s read successfully.\n", ifname) ;
 
     /* downsample */
     for (j=0; j<HALFHEIGHT; j++) {
@@ -251,7 +262,7 @@ main(int argc, char *argv[])
     sfinfo.samplerate = SAMPLERATE ;
     sfinfo.format = SF_FORMAT_WAV | SF_FORMAT_PCM_16 ;
 
-    sf = sf_open("wally.wav", SFM_WRITE, &sfinfo) ;
+    sf = sf_open(ofname, SFM_WRITE, &sfinfo) ;
 
     /* generate the "vis" code. */
     blank(500.0) ;
