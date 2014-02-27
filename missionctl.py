@@ -32,9 +32,9 @@ def release_payload():
 	logging.info("MC releasing the payload")
 	Transmitter.TXQueue.put(["warn.wav", "145.200"])
 	# TODO do the actual relase
-	GPIO.out(RELEASE, GPIO.HIGH)
+	GPIO.output(RELEASE, GPIO.HIGH)
 	time.sleep(1)
-	GPIO.out(RELEASE, GPIO.LOW)
+	GPIO.output(RELEASE, GPIO.LOW)
 
 def queue_numbers(value):
 	# TODO use the values as done in "count"
