@@ -12,13 +12,16 @@ def fmmod(in_fname, out_fname, fc):
 	pass
 
 def aprs(lat, lon, alt):
-	os.system('./afsk-encoder.py %s %s %s aprs.wav' % (str(lat), str(lon), str(alt)))
+	os.system('./afsk-encoder.py %s %s %s aprs_enc.wav' % (str(lat), str(lon), str(alt)))
+	os.system('rm aprs_resamp.wav')
 	os.system('resample -to 48000 aprs.wav aprs_resamp.wav')
-	fmmod('aprs_resamp.wav', 'aprs_fmmod.wav', 5000)
+	fmmod('aprs_resamp.wav', 'aprs_fmmod.wav', 15000)
 	pass
 
 def sstv(in_fname, out_fname):
-	os.system('./robot36 %s sstv_enc.wav' % in_fname)
+	os.system('convert %s -resize 320x240 -rotate 180 sstv.jpg' % in_fname)
+	os.system('./robot36 sstv.jpg sstv_enc.wav')
+	os.system('rm sstv_resamp.wav')
 	os.system('resample -to 48000 sstv_enc.wav sstv_resamp.wav')
-	fmmod('sstv_resamp.wav', out_fname, 5000)
+	fmmod('sstv_resamp.wav', out_fname, 15000)
 	pass

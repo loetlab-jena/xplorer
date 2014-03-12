@@ -18,7 +18,7 @@ import math
 import numpy
 
 # setting parameters
-fs = 44100 
+fs = 48000 
 fmark = 1200
 fspace = 2200
 baud = 1200
@@ -56,7 +56,7 @@ def create_bitstream(hdlcstring):
 	output = []
 	ones = 0
 	# add start flags
-	for i in range(0,20):
+	for i in range(0,50):
 		output.extend([0, 1, 1, 1, 1, 1, 1, 0])
 	# add and bitstuff the data (incl. FCS)
 	for char in hdlcstring:

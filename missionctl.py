@@ -14,6 +14,7 @@ from gpslistener import GPSListener
 import rfmod
 import time
 import logging
+import os
 
 # import the GPIO modules only if we're running on a raspberry pi
 pi = 1
@@ -38,9 +39,9 @@ def release_payload():
 
 def queue_numbers(value):
 	# TODO use the values as done in "count"
+	# TODO queue a pause
 	for num in str(value):
 		Transmitter.TXQueue.put(["snd/"+str(num)+".wav", "145.200"])
-	# TODO queue a pause
 	pass
 
 
@@ -75,11 +76,12 @@ while GPSListener.fix < 2:
 logging.info("MC GPS fix OK")
 
 # indicate GPS fix on LED (blinking for 1 minute)
-for i in range(1,60):
-	GPIO.output(LED, GPIO.HIGH)
-	time.sleep(0.5)
-	GPIO.output(LED, GPIO.LOW)
-	time.sleep(0.5)
+# TODO: UNCOMMENT WHEN FINISHED TESTING
+#for i in range(1,60):
+#	GPIO.output(LED, GPIO.HIGH)
+#	time.sleep(0.5)
+#	GPIO.output(LED, GPIO.LOW)
+#	time.sleep(0.5)
 
 # mission start
 
@@ -92,6 +94,7 @@ sstv_file = 1
 while flight == 1:
 	time_st = time.time()
 	# TODO take picture
+	os.system('raspistill -t 1 -o image.jpg')
 	if sstv_file == 1:
 		sstv_file = 2
 		Transmitter.TXQueue.put(["sstv1.wav", "145.200"])

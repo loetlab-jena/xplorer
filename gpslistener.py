@@ -7,7 +7,7 @@
 import threading
 import logging
 import time
-from gps import *
+# from gps import *
 
 
 class GPSListener(threading.Thread):
@@ -22,15 +22,20 @@ class GPSListener(threading.Thread):
 		gpsok = 0
 		while gpsok == 0:
 			try:
-				gpsd = gps(mode=WATCH_ENABLE)
+				# gpsd = gps(mode=WATCH_ENABLE)
+				gpsd = 0
 				gpsok = 1
 			except Exception:
 				logging.warn("GL Could not connect to GPSd .. retrying")
 				time.sleep(3)
 		logging.debug("GP connected to GPSd")
-		for report in gpsd:
-			GPSListener.lat = gpsd.fix.latitude
-			GPSListener.lon = gpsd.fix.longitude
-			GPSListener.alt = gpsd.fix.altitude
-			GPSListener.fix = gpsd.fix.mode
+		GPSListener.lat = 383 # gpsd.fix.latitude
+		GPSListener.lon = 625 # gpsd.fix.longitude
+		GPSListener.alt = 335 # gpsd.fix.altitude
+		GPSListener.fix = 0 # gpsd.fix.mode
+#		for report in gpsd:
+#			GPSListener.lat = gpsd.fix.latitude
+#			GPSListener.lon = gpsd.fix.longitude
+#			GPSListener.alt = gpsd.fix.altitude
+#			GPSListener.fix = gpsd.fix.mode
 
