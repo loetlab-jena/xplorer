@@ -135,7 +135,7 @@ def build_string(lat, lon, height):
 def build_packet(lat, lon, height, filename):
 	if lat == '' or lon == '' or height == '' or filename == '':
 		print 'ERROR: Check Parameters'
-		return 1
+		return 0
 	# add HDLC header to start
 	message = build_string(lat, lon, height)
 	hdlc = hdlc_encode(message)

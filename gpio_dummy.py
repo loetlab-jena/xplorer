@@ -10,6 +10,7 @@ OUT = 1
 LOW = 0
 HIGH = 1
 BOARD = 1
+BCM = 2
 
 def setmode(mode):
 	logging.debug("DM GPIO mode was set to %d" % mode)
