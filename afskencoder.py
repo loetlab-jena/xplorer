@@ -128,8 +128,7 @@ def write_output(phase, outfile):
 
 def build_string(lat, lon, height):
 	# builds a string from the input data
-	# TODO: checks for data validity and type convert everything
-	out = '!' + lat + 'Z' + lon + '-/A=' + height + ' Ballonmissionstest'
+	out = '!' + str(lat) + 'Z' + str(lon) + '-/A=' + str(height) + ' Ballonmissionstest'
 	return out
 
 def build_packet(lat, lon, height, filename):

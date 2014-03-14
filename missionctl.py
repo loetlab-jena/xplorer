@@ -33,7 +33,6 @@ RELEASE_FB = 28
 def release_payload():
 	logging.info("MC releasing the payload")
 	Transmitter.TXQueue.put(["snd/warn.wav", "145.200"])
-	# TODO do the actual relase
 	if (GPIO.input(RELEASE_FB)):
 		# if the switch is still closed, heat until it's open
 		GPIO.output(RELEASE, GPIO.HIGH)
@@ -94,7 +93,6 @@ logging.info("MC GPS fix OK")
 
 # mission start
 
-# TODO main state loop
 # the loop takes 1 minute to run
 flight = 1
 ascending = 1
@@ -102,7 +100,6 @@ loopcnt = 0
 sstv_file = 1
 while flight == 1:
 	time_st = time.time()
-	# TODO take picture
 	os.system('raspistill -t 1 -o image.jpg')
 	if sstv_file == 1:
 		sstv_file = 2
