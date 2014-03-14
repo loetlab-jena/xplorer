@@ -21,7 +21,7 @@ def setup(number, mode):
 def output(number, value):
 	logging.debug("DM GPIO %d new value: %d" % (number, value))
 
-def input(number, value):
+def input(number):
 	logging.debug("DM GPIO %d status requested." % number)
 	return HIGH
 

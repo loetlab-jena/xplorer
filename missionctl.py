@@ -26,6 +26,7 @@ except ImportError:
 
 LED = 17
 RELEASE = 27
+RELEASE_FB = 28
 
 # helper functions
 
@@ -33,13 +34,20 @@ def release_payload():
 	logging.info("MC releasing the payload")
 	Transmitter.TXQueue.put(["snd/warn.wav", "145.200"])
 	# TODO do the actual relase
-	GPIO.output(RELEASE, GPIO.HIGH)
-	time.sleep(1)
-	GPIO.output(RELEASE, GPIO.LOW)
+	if (GPIO.input(RELEASE_FB)):
+		# if the switch is still closed, heat until it's open
+		GPIO.output(RELEASE, GPIO.HIGH)
+		while (GPIO.input(RELEASE_FB)):
+			pass
+		GPIO.output(RELEASE, GPIO.LOW)
+	else:
+		# if the switch was open, heat half a second
+		GPIO.output(RELEASE, GPIO.HIGH)
+		time.sleep(0.5)
+		GPIO.output(RELEASE, GPIO.LOW)
 
 def queue_numbers(value):
-	# TODO use the values as done in "count"
-	# TODO queue a pause
+	# TODO countermeasures against loss of carrier??
 	for num in str(value):
 		Transmitter.TXQueue.put(["snd/"+str(num)+".wav", "145.200"])
 	pass
@@ -58,6 +66,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(LED, GPIO.OUT) # status LED
 GPIO.output(LED, GPIO.HIGH) # switch on to indicate software startup
 GPIO.setup(RELEASE, GPIO.OUT) # release pin
+GPIO.setup(RELEASE_FB, GPIO.IN) # release feedback pin
 GPIO.output(RELEASE, GPIO.LOW) # disable release
 
 # setup the transmitter thread
@@ -108,9 +117,9 @@ while flight == 1:
 	tmp_lat = GPSListener.lat
 	tmp_lon = GPSListener.lon
 	tmp_alt = GPSListener.alt
-	# TODO check numbers for nan etc
+	# TODO check if nan etc is a problem, should be no problem as they are directly inserted as a string
 	rfmod.aprs(tmp_lat, tmp_lon, tmp_alt)
-	Transmitter.TXQueue.put(["aprs_fmmod.wav", "145.200"])
+	Transmitter.TXQueue.put(["aprs_fmmod.wav", "144.800"])
 	# queue numbers
 	queue_numbers(tmp_lat)
 	queue_numbers(tmp_lon)
@@ -143,7 +152,7 @@ while loopcnt < STANDBY_LOOPS:
 	loopcnt = loopcnt + 1
 	time_st = time.time()
 	rfmod.aprs(tmp_lat, tmp_lon, tmp_alt)
-	Transmitter.TXQueue.put(["aprs_fmmod.wav", "145.200"])
+	Transmitter.TXQueue.put(["aprs_fmmod.wav", "144.800"])
 	Transmitter.TXQueue.join()
 	time_en = time.time()
 	time_delta = 180 - (time_en - time_st)
