@@ -15,6 +15,7 @@ import rfmod
 import time
 import logging
 import os
+import wave
 
 # import the GPIO modules only if we're running on a raspberry pi
 pi = 1
@@ -36,6 +37,7 @@ def release_payload():
 	if (GPIO.input(RELEASE_FB)):
 		# if the switch is still closed, heat until it's open
 		GPIO.output(RELEASE, GPIO.HIGH)
+		# TODO timeout!!!11
 		while (GPIO.input(RELEASE_FB)):
 			pass
 		GPIO.output(RELEASE, GPIO.LOW)
@@ -45,12 +47,26 @@ def release_payload():
 		time.sleep(0.5)
 		GPIO.output(RELEASE, GPIO.LOW)
 
-def queue_numbers(value):
-	# TODO countermeasures against loss of carrier??
+def queue_numbers(value, filename):
+	data = []
+	length = 0
+	# alternative: use sox
 	for num in str(value):
-		Transmitter.TXQueue.put(["snd/"+str(num)+".wav", "145.200"])
-	pass
-
+		try:
+			w = wave.open("snd/"+str(num)+".wav", "rb")
+			data.append([ w.getparams(), w.readframes(w.getnframes())])
+			w.close()
+			length = length + 1
+			logging.debug("File concatenated: "+str(num)+".wav")
+		except IOError:
+			logging.warn("File not found: "+str(num)+".wav")
+	if length > 0:
+		output = wave.open(filename, "wb")
+		output.setparams(data[0][0])
+		for row in data:
+			output.writeframes(row[1])
+		output.close()
+		Transmitter.TXQueue.put([filename, "145.200"])
 
 # main software
 # initate logging
@@ -118,9 +134,9 @@ while flight == 1:
 	rfmod.aprs(tmp_lat, tmp_lon, tmp_alt)
 	Transmitter.TXQueue.put(["aprs_fmmod.wav", "144.800"])
 	# queue numbers
-	queue_numbers(tmp_lat)
-	queue_numbers(tmp_lon)
-	queue_numbers(tmp_alt)
+	queue_numbers(str(tmp_lat*1000)[2:4], "lat.wav")
+	queue_numbers(str(tmp_lon*1000)[2:4], "lon.wav")
+	queue_numbers(int(tmp_alt), "alt.wav")
 
 	# wait for end of transmissions
 	Transmitter.TXQueue.join()
