@@ -79,13 +79,13 @@ else:
 	logging.debug("MC running NOT on RPi")
 
 GPIO.setmode(GPIO.BCM)
-GPIO.output(LED, GPIO.HIGH) # switch on to indicate software startup
 GPIO.setup(LED, GPIO.OUT) # status LED
-GPIO.output(RELEASE, GPIO.LOW) # disable release
+GPIO.output(LED, GPIO.HIGH) # switch on to indicate software startup
 GPIO.setup(RELEASE, GPIO.OUT) # release pin
+GPIO.output(RELEASE, GPIO.LOW) # disable release
 GPIO.setup(RELEASE_FB, GPIO.IN) # release feedback pin
-GPIO.output(HEADSHOT, GPIO.LOW) # disable shutoff
 GPIO.setup(HEADSHOT, GPIO.OUT) # set shutoff to output
+GPIO.output(HEADSHOT, GPIO.LOW) # disable shutoff
 
 # setup the transmitter thread
 txthread = Transmitter()
