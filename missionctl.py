@@ -137,8 +137,8 @@ while flight == 1:
 	rfmod.aprs(tmp_lat, tmp_lon, tmp_alt)
 	Transmitter.TXQueue.put(["aprs_fmmod.wav", "144.800"])
 	# queue numbers
-	queue_numbers(str(tmp_lat*1000)[2:4], "lat.wav")
-	queue_numbers(str(tmp_lon*1000)[2:4], "lon.wav")
+	queue_numbers(str(tmp_lat*1000)[2:5], "lat.wav")
+	queue_numbers(str(tmp_lon*1000)[2:5], "lon.wav")
 	queue_numbers(int(tmp_alt), "alt.wav")
 
 	# wait for end of transmissions
