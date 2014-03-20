@@ -27,8 +27,8 @@ except ImportError:
 
 HEADSHOT = 10
 LED = 17
-RELEASE = 27
-RELEASE_FB = 17 
+RELEASE = 22 
+RELEASE_FB = 23 
 
 # helper functions
 
