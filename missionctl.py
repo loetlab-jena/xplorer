@@ -25,9 +25,10 @@ except ImportError:
 	import gpio_dummy as GPIO
 	pi = 0;
 
+HEADSHOT = 10
 LED = 17
 RELEASE = 27
-RELEASE_FB = 28
+RELEASE_FB = 17 
 
 # helper functions
 
@@ -78,11 +79,13 @@ else:
 	logging.debug("MC running NOT on RPi")
 
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(LED, GPIO.OUT) # status LED
 GPIO.output(LED, GPIO.HIGH) # switch on to indicate software startup
+GPIO.setup(LED, GPIO.OUT) # status LED
+GPIO.output(RELEASE, GPIO.LOW) # disable release
 GPIO.setup(RELEASE, GPIO.OUT) # release pin
 GPIO.setup(RELEASE_FB, GPIO.IN) # release feedback pin
-GPIO.output(RELEASE, GPIO.LOW) # disable release
+GPIO.output(HEADSHOT, GPIO.LOW) # disable shutoff
+GPIO.setup(HEADSHOT, GPIO.OUT) # set shutoff to output
 
 # setup the transmitter thread
 txthread = Transmitter()
@@ -178,4 +181,5 @@ while loopcnt < STANDBY_LOOPS:
 logging.info("MC Mission End!")
 # wait additionally for all TX jobs to terminate
 Transmitter.TXQueue.join()
+GPIO.output(HEADSHOT, GPIO.HIGH)
 

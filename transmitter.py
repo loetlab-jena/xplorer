@@ -18,23 +18,36 @@ try:
 except ImportError:
 	import gpio_dummy as GPIO
 
-RF_ENBL = 18
+PA_ENBL = 22
+MOD_ENBL = 9
+PRE_ENBL = 11
+	
+def rfon():
+	GPIO.output(PA_ENBL, GPIO.HIGH)
+	GPIO.output(MOD_ENBL, GPIO.HIGH)
+	GPIO.output(PRE_ENBL, GPIO.LOW)
+
+def rfoff():
+	GPIO.output(PA_ENBL, GPIO.LOW)
+	GPIO.output(MOD_ENBL, GPIO.LOW)
+	GPIO.output(PRE_ENBL, GPIO.HIGH)
 
 class Transmitter(threading.Thread):
 	TXQueue = Queue.Queue()
 
 	def run(self):
 		if pi == 1:
-			GPIO.setup(RF_ENBL, GPIO.OUT) # RF enable pin is output
-			GPIO.output(RF_ENBL, GPIO.LOW) # switch it off
+			rfoff();
+			GPIO.setup(PA_ENBL, GPIO.OUT) # RF enable pin is output
+			GPIO.setup(MOD_ENBL, GPIO.OUT) # RF enable pin is output
+			GPIO.setup(PRE_ENBL, GPIO.OUT) # RF enable pin is output
 		while True: 
 			transmission = Transmitter.TXQueue.get()
+			rfon()
 			logging.info("TX File TX started: Filename: " + transmission[0] + "\tFrequency: "+transmission[1])
-			GPIO.output(RF_ENBL, GPIO.HIGH)
 			# TODO set LO frequency
 			os.system('aplay -D hw:1,0 %s' % transmission[0])
-			# TODO is it a problem to do task_done() and doing something afterwards?
 			Transmitter.TXQueue.task_done()
 			if Transmitter.TXQueue.empty():
-				GPIO.output(RF_ENBL, GPIO.LOW)
+				rfoff()
 			logging.info("TX File TX finished")
