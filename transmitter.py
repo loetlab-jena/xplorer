@@ -37,10 +37,10 @@ class Transmitter(threading.Thread):
 
 	def run(self):
 		if pi == 1:
-			rfoff();
 			GPIO.setup(PA_ENBL, GPIO.OUT) # RF enable pin is output
 			GPIO.setup(MOD_ENBL, GPIO.OUT) # RF enable pin is output
 			GPIO.setup(PRE_ENBL, GPIO.OUT) # RF enable pin is output
+			rfoff();
 		while True: 
 			transmission = Transmitter.TXQueue.get()
 			rfon()
