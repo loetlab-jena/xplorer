@@ -5,7 +5,7 @@
 import os
 import afskencoder
 
-gain = 0.5
+gain = 0.1
 
 def fmmod(in_fname, out_fname, fc):
 	# call fmmod with its parameters
