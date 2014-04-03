@@ -35,11 +35,11 @@ RELEASE_FB = 23
 def release_payload():
 	logging.info("MC releasing the payload")
 	Transmitter.TXQueue.put(["snd/warn.wav", "145.200"])
-	if (GPIO.input(RELEASE_FB)):
+	if not GPIO.input(RELEASE_FB):
 		# if the switch is still closed, heat until it's open
 		GPIO.output(RELEASE, GPIO.HIGH)
 		# TODO timeout!!!11
-		while (GPIO.input(RELEASE_FB)):
+		while not GPIO.input(RELEASE_FB):
 			pass
 		GPIO.output(RELEASE, GPIO.LOW)
 	else:
