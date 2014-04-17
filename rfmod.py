@@ -9,7 +9,8 @@ gain = 0.1
 
 def fmmod(in_fname, out_fname, fc):
 	# call fmmod with its parameters
-	os.system('./fmmod %s %s %s 3000 %s' % (in_fname, out_fname, str(fc), str(gain)))
+	# parameters for I,Q-gain and phase are determined by experimentation
+	os.system('./fmmod %s %s 15000 3000 0.11 0.1095 87.5' % (in_fname, out_fname))
 	pass
 
 def aprs(lat, lon, alt):

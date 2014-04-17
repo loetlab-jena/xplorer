@@ -41,16 +41,14 @@ class Transmitter(threading.Thread):
 			GPIO.setup(MOD_ENBL, GPIO.OUT) # RF enable pin is output
 			GPIO.setup(PRE_ENBL, GPIO.OUT) # RF enable pin is output
 			rfoff();
-			os.system('./loctl off')
 		while True: 
 			transmission = Transmitter.TXQueue.get()
 			rfon()
 			# TODO set LO frequency
-			os.system('./loctl on')
+			os.system('./loctl570 145215000')
 			logging.info("TX File TX started: Filename: " + transmission[0] + "\tFrequency: "+transmission[1])
 			os.system('aplay -D hw:1,0 %s' % transmission[0])
 			Transmitter.TXQueue.task_done()
 			if Transmitter.TXQueue.empty():
 				rfoff()
-				os.system('./loctl off')
 			logging.info("TX File TX finished")
