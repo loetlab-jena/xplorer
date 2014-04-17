@@ -1,4 +1,4 @@
-BIN=fmmod robot36 loctl
+BIN=fmmod robot36 loctl loctl570
 LIBS=-lsndfile -ljpeg -lm
 
 all: $(BIN)
@@ -11,6 +11,9 @@ fmmod:
 
 loctl: 
 	$(CC) -oloctl loctl.c
+
+loctl570:
+	$(CC) -oloctl570 loctl570.c
 
 .PHONY: clean
 clean:
