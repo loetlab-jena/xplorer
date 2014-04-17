@@ -3,12 +3,29 @@ These will have to be done manually to run the balloon mission software without 
 
 The following software is needed from packet sources:
 	resample
-	convert (ImageMagick)
+	imagemagick
 	i2c-tools
-	i2c-dev
+	libi2c-dev
 	gpsd
+	gpsd-clients
+	libsndfile-dev
+	libjpeg-dev
+
 
 The following configuration has to be done:
-	TODO load i2c-modules on boot, export i2c lm75
+	in /etc/modules add:
+	snd_soc_bcm2708
+	snd_soc_bcm2708_i2s
+	bcm2708_dmaengine
+	snd_soc_pcm5102a
+	snd_soc_hifiberry_dac
+
+	remove blacklist i2c from /etc/modprobe.d/raspi-blacklist.conf
+
 	TODO configure GPSd / gpsfake
-	TODO enable the camera
+	enable the camera in raspiconfig
+
+git clone https://github.com/loetlab-jena/xplorer.git
+make
+
+in /etc/rc.local gpsfake und start.sh eintragen
