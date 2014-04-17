@@ -183,5 +183,6 @@ while loopcnt < STANDBY_LOOPS:
 logging.info("MC Mission End!")
 # wait additionally for all TX jobs to terminate
 Transmitter.TXQueue.join()
+os.system('sync')
 GPIO.output(HEADSHOT, GPIO.HIGH)
 
