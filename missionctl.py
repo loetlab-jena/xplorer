@@ -26,9 +26,9 @@ except ImportError:
 	pi = 0;
 
 HEADSHOT = 10
-LED = 17
-RELEASE = 22 
-RELEASE_FB = 23 
+LED = 18
+RELEASE = 27
+RELEASE_FB = 17 
 
 # helper functions
 
@@ -36,6 +36,7 @@ def release_payload():
 	logging.info("MC releasing the payload")
 	Transmitter.TXQueue.put(["snd/warn.wav", "145.200"])
 	if not GPIO.input(RELEASE_FB):
+		logging.debug("Switch was closed")
 		# if the switch is still closed, heat until it's open
 		GPIO.output(RELEASE, GPIO.HIGH)
 		# TODO timeout!!!11
@@ -43,6 +44,7 @@ def release_payload():
 			pass
 		GPIO.output(RELEASE, GPIO.LOW)
 	else:
+		logging.debug("Switch was open")
 		# if the switch was open, heat half a second
 		GPIO.output(RELEASE, GPIO.HIGH)
 		time.sleep(0.5)
@@ -104,11 +106,11 @@ logging.info("MC GPS fix OK")
 
 # indicate GPS fix on LED (blinking for 1 minute)
 # TODO: UNCOMMENT WHEN FINISHED TESTING
-#for i in range(1,60):
-#	GPIO.output(LED, GPIO.HIGH)
-#	time.sleep(0.5)
-#	GPIO.output(LED, GPIO.LOW)
-#	time.sleep(0.5)
+for i in range(1,15):
+	GPIO.output(LED, GPIO.HIGH)
+	time.sleep(0.5)
+	GPIO.output(LED, GPIO.LOW)
+	time.sleep(0.5)
 
 # mission start
 
