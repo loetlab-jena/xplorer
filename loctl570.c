@@ -110,7 +110,6 @@ int si570_calc_divs(unsigned long frequency,
 				*out_hs_div = hs_div;
 				*out_rfreq = (uint64_t)(fdco << 28) / (uint64_t)fxtal;
 				best_fdco = fdco;
-				printf("found\n");
 			}
 			n1 += (n1 == 1 ? 1 : 2);
 		}
@@ -139,7 +138,12 @@ int si570_set_frequency(unsigned long frequency)
 	if (err)
 		return err;
 
-	i2c_smbus_write_byte_data(file, SI570_REG_FREEZE_DCO, SI570_FREEZE_DCO);
+	err = i2c_smbus_write_byte_data(file, SI570_REG_FREEZE_DCO, SI570_FREEZE_DCO);
+	if (err) {
+		printf("I2C error - communication with SI570 failed!\n");
+		return -1;
+	}
+	/* assume, that if the first byte write is OK, the slave is present and no further errors occur */
 	i2c_smbus_write_byte_data(file, SI570_REG_HS_N1,
 			((hs_div - HS_DIV_OFFSET) << HS_DIV_SHIFT) |
 			(((n1 - 1) >> 2) & N1_6_2_MASK));
@@ -175,7 +179,5 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	si570_set_frequency(frequency);	
-
-	return 0;
+	return si570_set_frequency(frequency);	
 }
