@@ -24,10 +24,17 @@ The following configuration has to be done:
 
 	remove blacklist i2c from /etc/modprobe.d/raspi-blacklist.conf
 
-	TODO configure GPSd / gpsfake
 	enable the camera in raspiconfig
 
-git clone https://github.com/loetlab-jena/xplorer.git
-make
+get the software:
+	git clone https://github.com/loetlab-jena/xplorer.git
+	make
 
-in /etc/rc.local gpsfake und start.sh eintragen
+in /etc/rc.local add gpsfake and start.sh as follows:
+	# sudo -u pi gpsfake -c0.1 /home/pi/log3.nmea &
+	stty -F /dev/ttyAMA0 4800
+	gpsd -b -n /dev/ttyAMA0 &
+	/home/pi/xplorer/start.sh &
+	gpspipe -r -o /home/pi/missions/$(date +%Y%m%d-%H%M).txt &
+
+	in /etc/inittab comment the serial console on /dev/ttyAMA0
