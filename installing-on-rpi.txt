@@ -19,6 +19,8 @@ The following configuration has to be done:
 	bcm2708_dmaengine
 	snd_soc_pcm5102a
 	snd_soc_hifiberry_dac
+	i2c-bcm2708
+	i2c-dev
 
 	remove blacklist i2c from /etc/modprobe.d/raspi-blacklist.conf
 
