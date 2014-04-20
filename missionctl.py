@@ -6,8 +6,8 @@
 # 
 
 # flight parameters
-RISE_LOOPS = 2		# each is one minute 
-STANDBY_LOOPS = 2	# each is three minutes
+RISE_LOOPS = 9		# each is one minute 
+STANDBY_LOOPS = 9	# each is three minutes
 
 from transmitter import Transmitter
 from gpslistener import GPSListener
@@ -138,9 +138,15 @@ while flight == 1:
 	tmp_lon = GPSListener.lon
 	tmp_alt = GPSListener.alt
 	# TODO check if nan etc is a problem, should be no problem as they are directly inserted as a string
-	rfmod.aprs("%07.2f" % (GPSListener.lat*100,) + "N", 
-		"%08.2f" % (GPSListener.lon*100,) + "E", 
-		"%06.0f" % (GPSListener.alt,))
+	latd = int(lat)
+	latm = int((lat-latd)*60)
+	lats = int(((lat-latd)*60-latm)*60)
+	lond = int(lon)
+	lonm = int((lon-lond)*60)
+	lons = int(((lon-lond)*60-lonm)*60)
+	rfmod.aprs(("%02.0f" % (latd,)) + ("%02.0f" % (latm,)) + "." + ("%02.0f" % (lats,)) + "N",
+	("%03.0f" % (lond,)) + ("%02.0f" % (lonm,)) + "." + ("%02.0f" % (lons,)) + "E",
+	"%06.0f" % (GPSListener.alt,))
 	Transmitter.TXQueue.put(["aprs_fmmod.wav", "144.800"])
 	# queue numbers
 	queue_numbers(str(tmp_lat*1000)[2:5], "lat.wav")
@@ -173,9 +179,15 @@ logging.info("MC Stopping SSTV TX, entering Standby")
 while loopcnt < STANDBY_LOOPS:
 	loopcnt = loopcnt + 1
 	time_st = time.time()
-	rfmod.aprs("%07.2f" % (GPSListener.lat*100,) + "N", 
-		"%08.2f" % (GPSListener.lon*100,) + "E", 
-		"%06.0f" % (GPSListener.alt,))
+	latd = int(lat)
+	latm = int((lat-latd)*60)
+	lats = int(((lat-latd)*60-latm)*60)
+	lond = int(lon)
+	lonm = int((lon-lond)*60)
+	lons = int(((lon-lond)*60-lonm)*60)
+	rfmod.aprs(("%02.0f" % (latd,)) + ("%02.0f" % (latm,)) + "." + ("%02.0f" % (lats,)) + "N",
+	("%03.0f" % (lond,)) + ("%02.0f" % (lonm,)) + "." + ("%02.0f" % (lons,)) + "E",
+	"%06.0f" % (GPSListener.alt,))
 	Transmitter.TXQueue.put(["aprs_fmmod.wav", "144.800"])
 	Transmitter.TXQueue.join()
 	time_en = time.time()
