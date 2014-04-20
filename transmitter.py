@@ -44,8 +44,12 @@ class Transmitter(threading.Thread):
 		while True: 
 			transmission = Transmitter.TXQueue.get()
 			rfon()
-			# TODO set LO frequency
-			ret = os.system('./loctl570 145210000')
+			# TODO reimplement frequency handling correctly
+			if transmission[1] == "144.800":
+				ret = os.system('./loctl570 144810000')
+			else:
+				ret = os.system('./loctl570 145210000')
+
 			if ret:
 				logging.warn("TX Error setting LO frequency")
 			logging.info("TX File TX started: Filename: " + transmission[0] + "\tFrequency: "+transmission[1])
