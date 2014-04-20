@@ -136,8 +136,8 @@ while flight == 1:
 	tmp_lon = GPSListener.lon
 	tmp_alt = GPSListener.alt
 	# TODO check if nan etc is a problem, should be no problem as they are directly inserted as a string
-	rfmod.aprs("%04.2f" % (GPSListener.lat*100,) + "N", 
-		"%05.2f" % (GPSListener.lon*100,) + "E", 
+	rfmod.aprs("%07.2f" % (GPSListener.lat*100,) + "N", 
+		"%08.2f" % (GPSListener.lon*100,) + "E", 
 		"%06.0f" % (GPSListener.alt,))
 	Transmitter.TXQueue.put(["aprs_fmmod.wav", "144.800"])
 	# queue numbers
@@ -171,8 +171,8 @@ logging.info("MC Stopping SSTV TX, entering Standby")
 while loopcnt < STANDBY_LOOPS:
 	loopcnt = loopcnt + 1
 	time_st = time.time()
-	rfmod.aprs("%04.2f" % (GPSListener.lat*100,) + "N", 
-		"%05.2f" % (GPSListener.lon*100,) + "E", 
+	rfmod.aprs("%07.2f" % (GPSListener.lat*100,) + "N", 
+		"%08.2f" % (GPSListener.lon*100,) + "E", 
 		"%06.0f" % (GPSListener.alt,))
 	Transmitter.TXQueue.put(["aprs_fmmod.wav", "144.800"])
 	Transmitter.TXQueue.join()
