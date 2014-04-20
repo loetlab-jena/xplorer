@@ -153,7 +153,6 @@ def build_packet(lat, lon, height, filename):
 	return 0
 
 
-def main():
+def test():
 	build_packet('5055.42N', '01152.75E', '000300', 'aprs.wav')
 
-main()
