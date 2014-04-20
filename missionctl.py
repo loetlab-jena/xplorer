@@ -146,7 +146,7 @@ while flight == 1:
 	lons = int(((lon-lond)*60-lonm)*60)
 	rfmod.aprs(("%02.0f" % (latd,)) + ("%02.0f" % (latm,)) + "." + ("%02.0f" % (lats,)) + "N",
 	("%03.0f" % (lond,)) + ("%02.0f" % (lonm,)) + "." + ("%02.0f" % (lons,)) + "E",
-	"%06.0f" % (GPSListener.alt,))
+	"%06.0f" % (GPSListener.alt*3.28,))
 	Transmitter.TXQueue.put(["aprs_fmmod.wav", "144.800"])
 	# queue numbers
 	queue_numbers(str(tmp_lat*1000)[2:5], "lat.wav")
@@ -187,7 +187,7 @@ while loopcnt < STANDBY_LOOPS:
 	lons = int(((lon-lond)*60-lonm)*60)
 	rfmod.aprs(("%02.0f" % (latd,)) + ("%02.0f" % (latm,)) + "." + ("%02.0f" % (lats,)) + "N",
 	("%03.0f" % (lond,)) + ("%02.0f" % (lonm,)) + "." + ("%02.0f" % (lons,)) + "E",
-	"%06.0f" % (GPSListener.alt,))
+	"%06.0f" % (GPSListener.alt*3.28,))
 	Transmitter.TXQueue.put(["aprs_fmmod.wav", "144.800"])
 	Transmitter.TXQueue.join()
 	time_en = time.time()
