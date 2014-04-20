@@ -17,7 +17,7 @@ def aprs(lat, lon, alt):
 	# no LO offset needed
 	afskencoder.build_packet(str(lat), str(lon), str(alt), 'aprs_enc.wav')
 	os.system('rm aprs_resamp.wav')
-	os.system('resample -to 48000 aprs.wav aprs_resamp.wav')
+	os.system('resample -to 48000 aprs_enc.wav aprs_resamp.wav')
 	fmmod('aprs_resamp.wav', 'aprs_fmmod.wav', 0)
 	pass
 
