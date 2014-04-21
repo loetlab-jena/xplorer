@@ -42,6 +42,7 @@ def release_payload():
 		# if the switch is still closed, heat until it's open
 		GPIO.output(RELEASE, GPIO.HIGH)
 		# TODO timeout!!!11
+		time.sleep(5)
 		while not GPIO.input(RELEASE_FB):
 			pass
 		GPIO.output(RELEASE, GPIO.LOW)
@@ -49,7 +50,7 @@ def release_payload():
 		logging.debug("Switch was open")
 		# if the switch was open, heat half a second
 		GPIO.output(RELEASE, GPIO.HIGH)
-		time.sleep(0.5)
+		time.sleep(5)
 		GPIO.output(RELEASE, GPIO.LOW)
 
 def queue_numbers(value, filename):
@@ -72,6 +73,21 @@ def queue_numbers(value, filename):
 			output.writeframes(row[1])
 		output.close()
 		Transmitter.TXQueue.put([filename, "145.200"])
+
+def send_aprs():
+	lat = GPSListener.lat
+	lon = GPSListener.lon
+	alt = GPSListener.alt
+	latd = int(lat)
+	latm = int((lat-latd)*60)
+	lats = int(((lat-latd)*60-latm)*60)
+	lond = int(lon)
+	lonm = int((lon-lond)*60)
+	lons = int(((lon-lond)*60-lonm)*60)
+	rfmod.aprs(("%02.0f" % (latd,)) + ("%02.0f" % (latm,)) + "." + ("%02.0f" % (lats,)) + "N",
+	("%03.0f" % (lond,)) + ("%02.0f" % (lonm,)) + "." + ("%02.0f" % (lons,)) + "E",
+	"%06.0f" % (alt*3.28,))
+	Transmitter.TXQueue.put(["aprs_fmmod.wav", "144.800"])
 
 # main software
 # initate logging
@@ -133,21 +149,11 @@ while flight == 1:
 		Transmitter.TXQueue.put(["sstv2.wav", "145.200"])
 		rfmod.sstv("image.jpg", "sstv1.wav")
 	
+	send_aprs()
 	# get lan/lot/alt from gps
 	tmp_lat = GPSListener.lat
 	tmp_lon = GPSListener.lon
 	tmp_alt = GPSListener.alt
-	# TODO check if nan etc is a problem, should be no problem as they are directly inserted as a string
-	latd = int(lat)
-	latm = int((lat-latd)*60)
-	lats = int(((lat-latd)*60-latm)*60)
-	lond = int(lon)
-	lonm = int((lon-lond)*60)
-	lons = int(((lon-lond)*60-lonm)*60)
-	rfmod.aprs(("%02.0f" % (latd,)) + ("%02.0f" % (latm,)) + "." + ("%02.0f" % (lats,)) + "N",
-	("%03.0f" % (lond,)) + ("%02.0f" % (lonm,)) + "." + ("%02.0f" % (lons,)) + "E",
-	"%06.0f" % (GPSListener.alt*3.28,))
-	Transmitter.TXQueue.put(["aprs_fmmod.wav", "144.800"])
 	# queue numbers
 	queue_numbers(str(tmp_lat*1000)[2:5], "lat.wav")
 	queue_numbers(str(tmp_lon*1000)[2:5], "lon.wav")
@@ -179,16 +185,7 @@ logging.info("MC Stopping SSTV TX, entering Standby")
 while loopcnt < STANDBY_LOOPS:
 	loopcnt = loopcnt + 1
 	time_st = time.time()
-	latd = int(lat)
-	latm = int((lat-latd)*60)
-	lats = int(((lat-latd)*60-latm)*60)
-	lond = int(lon)
-	lonm = int((lon-lond)*60)
-	lons = int(((lon-lond)*60-lonm)*60)
-	rfmod.aprs(("%02.0f" % (latd,)) + ("%02.0f" % (latm,)) + "." + ("%02.0f" % (lats,)) + "N",
-	("%03.0f" % (lond,)) + ("%02.0f" % (lonm,)) + "." + ("%02.0f" % (lons,)) + "E",
-	"%06.0f" % (GPSListener.alt*3.28,))
-	Transmitter.TXQueue.put(["aprs_fmmod.wav", "144.800"])
+	send_aprs()
 	Transmitter.TXQueue.join()
 	time_en = time.time()
 	time_delta = 180 - (time_en - time_st)
