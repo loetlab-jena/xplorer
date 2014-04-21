@@ -41,16 +41,13 @@ def release_payload():
 		logging.debug("Switch was closed")
 		# if the switch is still closed, heat until it's open
 		GPIO.output(RELEASE, GPIO.HIGH)
-		# TODO timeout!!!11
-		time.sleep(5)
-		while not GPIO.input(RELEASE_FB):
-			pass
+		time.sleep(7)
 		GPIO.output(RELEASE, GPIO.LOW)
 	else:
 		logging.debug("Switch was open")
 		# if the switch was open, heat half a second
 		GPIO.output(RELEASE, GPIO.HIGH)
-		time.sleep(5)
+		time.sleep(7)
 		GPIO.output(RELEASE, GPIO.LOW)
 
 def queue_numbers(value, filename):
