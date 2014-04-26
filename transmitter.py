@@ -18,9 +18,9 @@ try:
 except ImportError:
 	import gpio_dummy as GPIO
 
-PA_ENBL = 22
+PA_ENBL = 7
 MOD_ENBL = 9
-PRE_ENBL = 11
+PRE_ENBL = 8
 	
 def rfon():
 	GPIO.output(PA_ENBL, GPIO.HIGH)

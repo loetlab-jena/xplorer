@@ -25,10 +25,10 @@ except ImportError:
 	import gpio_dummy as GPIO
 	pi = 0;
 
-HEADSHOT = 10
-LED = 18
-RELEASE = 27
-RELEASE_FB = 17 
+HEADSHOT = 4
+LED = 10
+RELEASE = 11
+RELEASE_FB = 17
 
 # helper functions
 
