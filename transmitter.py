@@ -49,11 +49,13 @@ class Transmitter(threading.Thread):
 			if int(mac) == int(0xba27ebbae859): 
 				# Raspberry B
 				# TODO reimplement frequency handling correctly
+				logging.debug("TX Raspberry B, using 10kHz SI offset")
 				if transmission[1] == "144.800":
 					ret = os.system('./loctl570 144810000')
 				else:
 					ret = os.system('./loctl570 145210000')
 			else:
+				logging.debug("TX Raspberry A, using 5kHz SI offset")
 				if transmission[1] == "144.800":
 					ret = os.system('./loctl570 144805000')
 				else:
