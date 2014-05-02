@@ -10,6 +10,7 @@ import Queue
 import time
 import logging
 import os
+from uuid import getnode as get_mac
 
 # import the GPIO modules only if we're running on a raspberry pi
 pi = 1
@@ -44,11 +45,19 @@ class Transmitter(threading.Thread):
 		while True: 
 			transmission = Transmitter.TXQueue.get()
 			rfon()
-			# TODO reimplement frequency handling correctly
-			if transmission[1] == "144.800":
-				ret = os.system('./loctl570 144810000')
+			mac = get_mac();
+			if get_mac == int(0xba27ebbae859): 
+				# Raspberry B
+				# TODO reimplement frequency handling correctly
+				if transmission[1] == "144.800":
+					ret = os.system('./loctl570 144810000')
+				else:
+					ret = os.system('./loctl570 145210000')
 			else:
-				ret = os.system('./loctl570 145210000')
+				if transmission[1] == "144.800":
+					ret = os.system('./loctl570 144805000')
+				else:
+					ret = os.system('./loctl570 145205000')
 
 			if ret:
 				logging.warn("TX Error setting LO frequency")
