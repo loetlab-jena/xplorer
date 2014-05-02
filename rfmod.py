@@ -23,7 +23,7 @@ def aprs(lat, lon, alt):
 
 def sstv(in_fname, out_fname):
 	# no LO offset needed
-	os.system('convert %s -resize 320x240 -rotate 180 sstv.jpg' % in_fname)
+	os.system('convert %s -resize 320x240 sstv.jpg' % in_fname)
 	os.system('./robot36 sstv.jpg sstv_enc.wav')
 	os.system('rm sstv_resamp.wav')
 	os.system('resample -to 48000 sstv_enc.wav sstv_resamp.wav')
