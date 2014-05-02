@@ -1,18 +1,10 @@
 This document includes the neccesary modifications to a default raspian image
 These will have to be done manually to run the balloon mission software without problems. 
 
-The following software is needed from packet sources:
-	resample
-	imagemagick
-	i2c-tools
-	libi2c-dev
-	gpsd
-	gpsd-clients
-	libsndfile-dev
-	libjpeg-dev
+Installing needed software from packet sources
+> sudo apt-get update
+> sudo apt-get install resample imagemagick i2c-tools libi2c-dev gpsd gpsd-clients libsndfile-dev libjpeg-dev
 
-
-The following configuration has to be done:
 in /etc/modules add:
 	snd_soc_bcm2708
 	snd_soc_bcm2708_i2s
@@ -27,10 +19,15 @@ from /etc/modprobe.d/raspi-blacklist.conf
 
 in sudo raspi-config
 	enable the camera interface
+	disable boot to desktop
+	expand filesystem
+	reboot
 
 get the software:
-	git clone https://github.com/loetlab-jena/xplorer.git
-	make
+> cd ~
+> git clone https://github.com/loetlab-jena/xplorer.git
+> cd xplorer
+> make
 
 in /etc/rc.local add:
 	# sudo -u pi gpsfake -c0.1 /home/pi/log2.nmea &
