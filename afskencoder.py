@@ -33,7 +33,7 @@ def hdlc_encode(datastring):
 	# frame type (Unnumbered Information UI)
 	# frame PID (0xF0)
 	hdlcstring = [ 	ord('A')*2, ord('P')*2, ord('R')*2, ord('S')*2, ord(' ')*2, ord(' ')*2, 0x60,
-			ord('D')*2, ord('K')*2, ord('3')*2, ord('S')*2, ord('B')*2, ord(' ')*2, 0x68,
+			ord('D')*2, ord('R')*2, ord('4')*2, ord('X')*2, ord(' ')*2, ord(' ')*2, 0x68,
 			ord('W')*2, ord('I')*2, ord('D')*2, ord('E')*2, ord('1')*2, ord(' ')*2, 0x63,
 			0x03, 0xf0]
 	hdlcstring.extend(ord(a) for a in datastring)
@@ -128,7 +128,7 @@ def write_output(phase, outfile):
 
 def build_string(lat, lon, height):
 	# builds a string from the input data
-	out = '!' + str(lat) + 'Z' + str(lon) + '-/A=' + str(height) + ' Ballonmissionstest'
+	out = '!' + str(lat) + 'Z' + str(lon) + 'O/A=' + str(height) + ' Ballonmission'
 	return out
 
 def build_packet(lat, lon, height, filename):
