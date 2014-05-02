@@ -46,7 +46,7 @@ class Transmitter(threading.Thread):
 			transmission = Transmitter.TXQueue.get()
 			rfon()
 			mac = get_mac();
-			if get_mac == int(0xba27ebbae859): 
+			if int(mac) == int(0xba27ebbae859): 
 				# Raspberry B
 				# TODO reimplement frequency handling correctly
 				if transmission[1] == "144.800":
