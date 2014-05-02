@@ -46,7 +46,7 @@ class Transmitter(threading.Thread):
 			transmission = Transmitter.TXQueue.get()
 			rfon()
 			mac = get_mac();
-			if int(mac) == int(0xba27ebbae859): 
+			if int(mac) == int(0xb827ebbae859): 
 				# Raspberry B
 				# TODO reimplement frequency handling correctly
 				logging.debug("TX Raspberry B, using 10kHz SI offset")
