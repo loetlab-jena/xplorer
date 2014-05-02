@@ -33,7 +33,7 @@ get the software:
 	make
 
 in /etc/rc.local add:
-	# sudo -u pi gpsfake -c0.1 /home/pi/log3.nmea &
+	# sudo -u pi gpsfake -c0.1 /home/pi/log2.nmea &
 	stty -F /dev/ttyAMA0 4800
 	gpsd -b -n /dev/ttyAMA0 &
 	/home/pi/xplorer/start.sh &
@@ -41,5 +41,11 @@ in /etc/rc.local add:
 
 in /etc/inittab 
 	comment out the serial console on /dev/ttyAMA0
+
+in /home/pi/
+	create directory "missions"
+
+as root: open crontab -e, insert
+	* * * * * 	/home/pi/xplorer/camcron.sh
 
 
