@@ -6,8 +6,8 @@
 # 
 
 # flight parameters
-RISE_LOOPS = 9		# each is one minute 
-STANDBY_LOOPS = 9	# each is three minutes
+RISE_LOOPS = 20		# each is one minute 
+STANDBY_LOOPS = 7	# each is three minutes
 
 from transmitter import Transmitter
 from gpslistener import GPSListener
