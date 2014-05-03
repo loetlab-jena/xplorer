@@ -46,8 +46,12 @@ class Transmitter(threading.Thread):
 			try:
 				transmission = Transmitter.TXQueue.get()
 				rfon()
-				mac = get_mac();
-				if int(mac) == int(0xb827ebbae859): 
+				try:
+					mac = open('/sys/class/net/eth0/address').read()
+				except Exception:
+					logging.warn("TX could not determine host MAC adress");
+					mac = "00:00:00:00:00:00"
+				if str(mac) == "b8:27:eb:ba:e8:59": 
 					# Raspberry B
 					logging.debug("TX Raspberry B, using 10kHz SI offset")
 					if transmission[1] == "144.800":
