@@ -16,6 +16,7 @@ import sys
 import wave
 import math
 import numpy
+import logging
 
 # setting parameters
 fs = 48000 
@@ -152,6 +153,7 @@ def build_packet(lat, lon, height, filename):
 		# write output file
 		write_output(phi, filename)
 	except Exception:
+		logging.warn("AF APRS could not be generated sanely")
 		pass
 	return 0
 
