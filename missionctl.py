@@ -16,6 +16,8 @@ import time
 import logging
 import os
 import wave
+import sys
+import traceback
 
 # import the GPIO modules only if we're running on a raspberry pi
 pi = 1
@@ -89,6 +91,12 @@ def send_aprs():
 	except Exception:
 		logging.warn("MC Could not convert GPS data to APRS Format (No Fix?)")
 	Transmitter.TXQueue.put(["aprs_fmmod.wav", "144.800"])
+
+def log_uncaught_exceptions(ex_cls, ex, tb):
+	logging.critical(''.join(traceback.format_tb(tb)))
+	logging.critical('{0}: {1}'.format(ex_cls, ex))
+
+sys.excepthook = log_uncaught_exceptions
 
 # main software
 # initate logging
