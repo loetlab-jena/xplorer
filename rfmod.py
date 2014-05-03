@@ -15,7 +15,10 @@ def fmmod(in_fname, out_fname, fc):
 
 def aprs(lat, lon, alt):
 	# no LO offset needed
-	afskencoder.build_packet(str(lat), str(lon), str(alt), 'aprs_enc.wav')
+	try:
+		afskencoder.build_packet(str(lat), str(lon), str(alt), 'aprs_enc.wav')
+	except Exception:
+		pass
 	os.system('rm aprs_resamp.wav')
 	os.system('resample -to 48000 aprs_enc.wav aprs_resamp.wav')
 	fmmod('aprs_resamp.wav', 'aprs_fmmod.wav', 0)

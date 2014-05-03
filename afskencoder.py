@@ -132,24 +132,27 @@ def build_string(lat, lon, height):
 	return out
 
 def build_packet(lat, lon, height, filename):
-	if lat == '' or lon == '' or height == '' or filename == '':
-		print 'ERROR: Check Parameters'
-		return 0
-	# add HDLC header to start
-	message = build_string(lat, lon, height)
-	hdlc = hdlc_encode(message)
-	# calculate FCS
-	fcs = fcs_calc(hdlc)
-	fcs.reverse()
-	hdlc.extend(fcs);
-	# create bitstream
-	output = create_bitstream(hdlc);
-	# encode nrzi
-	nrzi = nrzi_encode(output)
-	# encode afsk
-	phi = phase_acc(nrzi)
-	# write output file
-	write_output(phi, filename)
+	try:
+		if lat == '' or lon == '' or height == '' or filename == '':
+			print 'ERROR: Check Parameters'
+			return 0
+		# add HDLC header to start
+		message = build_string(lat, lon, height)
+		hdlc = hdlc_encode(message)
+		# calculate FCS
+		fcs = fcs_calc(hdlc)
+		fcs.reverse()
+		hdlc.extend(fcs);
+		# create bitstream
+		output = create_bitstream(hdlc);
+		# encode nrzi
+		nrzi = nrzi_encode(output)
+		# encode afsk
+		phi = phase_acc(nrzi)
+		# write output file
+		write_output(phi, filename)
+	except Exception:
+		pass
 	return 0
 
 

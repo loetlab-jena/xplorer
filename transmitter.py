@@ -43,29 +43,31 @@ class Transmitter(threading.Thread):
 			GPIO.setup(PRE_ENBL, GPIO.OUT) # RF enable pin is output
 			rfoff();
 		while True: 
-			transmission = Transmitter.TXQueue.get()
-			rfon()
-			mac = get_mac();
-			if int(mac) == int(0xb827ebbae859): 
-				# Raspberry B
-				# TODO reimplement frequency handling correctly
-				logging.debug("TX Raspberry B, using 10kHz SI offset")
-				if transmission[1] == "144.800":
-					ret = os.system('./loctl570 144810000')
+			try:
+				transmission = Transmitter.TXQueue.get()
+				rfon()
+				mac = get_mac();
+				if int(mac) == int(0xb827ebbae859): 
+					# Raspberry B
+					logging.debug("TX Raspberry B, using 10kHz SI offset")
+					if transmission[1] == "144.800":
+						ret = os.system('./loctl570 144810000')
+					else:
+						ret = os.system('./loctl570 145210000')
 				else:
-					ret = os.system('./loctl570 145210000')
-			else:
-				logging.debug("TX Raspberry A, using 5kHz SI offset")
-				if transmission[1] == "144.800":
-					ret = os.system('./loctl570 144805000')
-				else:
-					ret = os.system('./loctl570 145205000')
-
-			if ret:
-				logging.warn("TX Error setting LO frequency")
-			logging.info("TX File TX started: Filename: " + transmission[0] + "\tFrequency: "+transmission[1])
-			os.system('aplay -D hw:1,0 %s' % transmission[0])
-			Transmitter.TXQueue.task_done()
-			if Transmitter.TXQueue.empty():
-				rfoff()
-			logging.info("TX File TX finished")
+					logging.debug("TX Raspberry A, using 5kHz SI offset")
+					if transmission[1] == "144.800":
+						ret = os.system('./loctl570 144805000')
+					else:
+						ret = os.system('./loctl570 145205000')
+	
+				if ret:
+					logging.warn("TX Error setting LO frequency")
+				logging.info("TX File TX started: Filename: " + transmission[0] + "\tFrequency: "+transmission[1])
+				os.system('aplay -D hw:1,0 %s' % transmission[0])
+				Transmitter.TXQueue.task_done()
+				if Transmitter.TXQueue.empty():
+					rfoff()
+				logging.info("TX File TX finished")
+			except Exception:
+				logging.warn("TX could not get transmission..")
