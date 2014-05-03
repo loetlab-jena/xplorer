@@ -95,6 +95,7 @@ def send_aprs():
 def log_uncaught_exceptions(ex_cls, ex, tb):
 	logging.critical(''.join(traceback.format_tb(tb)))
 	logging.critical('{0}: {1}'.format(ex_cls, ex))
+	release_payload()
 
 sys.excepthook = log_uncaught_exceptions
 
