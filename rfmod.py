@@ -4,6 +4,7 @@
 
 import os
 import afskencoder
+import logging
 
 gain = 0.1
 
@@ -18,6 +19,7 @@ def aprs(lat, lon, alt):
 	try:
 		afskencoder.build_packet(str(lat), str(lon), str(alt), 'aprs_enc.wav')
 	except Exception:
+		logging.warn("RF could not convert GPS coords to string (no fix?)")
 		pass
 	os.system('rm aprs_resamp.wav')
 	os.system('resample -to 48000 aprs_enc.wav aprs_resamp.wav')
