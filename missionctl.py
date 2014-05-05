@@ -76,8 +76,8 @@ def send_aprs():
 	lon = GPSListener.lon
 	alt = GPSListener.alt
 	logging.debug("MC lat: "+ str(lat))
-	logging.debug("MC lon: "+ str(lat))
-	logging.debug("MC alt: "+ str(lat))
+	logging.debug("MC lon: "+ str(lon))
+	logging.debug("MC alt: "+ str(alt))
 	try:
 		latd = int(lat)
 		latm = int((lat-latd)*60)
