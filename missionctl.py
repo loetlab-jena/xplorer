@@ -31,6 +31,7 @@ HEADSHOT = 4
 LED = 10
 RELEASE = 11
 RELEASE_FB = 17
+CAMERA = 21
 
 # helper functions
 
@@ -92,6 +93,12 @@ def send_aprs():
 		logging.warn("MC Could not convert GPS data to APRS Format (No Fix?)")
 	Transmitter.TXQueue.put(["aprs_fmmod.wav", "144.800"])
 
+def reset_cam():
+	GPIO.output(CAMERA, GPIO.LOW) # disable camera power
+	time.sleep(0.3)
+	GPIO.output(CAMERA, GPIO.HIGH) # enable camera power
+
+
 def log_uncaught_exceptions(ex_cls, ex, tb):
 	logging.critical(''.join(traceback.format_tb(tb)))
 	logging.critical('{0}: {1}'.format(ex_cls, ex))
@@ -116,6 +123,8 @@ GPIO.output(RELEASE, GPIO.LOW) # disable release
 GPIO.setup(RELEASE_FB, GPIO.IN) # release feedback pin
 GPIO.setup(HEADSHOT, GPIO.OUT) # set shutoff to output
 GPIO.output(HEADSHOT, GPIO.LOW) # disable shutoff
+GPIO.setup(CAMERA, GPIO.OUT) # set cam power to output
+GPIO.output(CAMERA, GPIO.HIGH) # enable camera power
 
 # setup the transmitter thread
 txthread = Transmitter()
@@ -148,15 +157,28 @@ loopcnt = 0
 sstv_file = 1
 while flight == 1:
 	time_st = time.time()
-	os.system('raspistill -t 1 -o image.jpg')
+	logging.debug("MC !!!4")
+
+	picok = 1
+	ret = os.system('timeout --signal=KILL 3 raspistill -v -t 10 -o image.jpg')
+	if ret == 124:
+		picok = 0
+		logging.warn("MC raspistill was hanging .. transmitting last picture again");
+	
+	reset_cam()
+
+	logging.debug("MC !!!5")
 	if sstv_file == 1:
 		sstv_file = 2
 		Transmitter.TXQueue.put(["sstv1.wav", "145.200"])
-		rfmod.sstv("image.jpg", "sstv2.wav")
+		if picok == 1:
+			rfmod.sstv("image.jpg", "sstv2.wav")
 	else:
 		sstv_file = 1
 		Transmitter.TXQueue.put(["sstv2.wav", "145.200"])
-		rfmod.sstv("image.jpg", "sstv1.wav")
+		if picok == 1:
+			rfmod.sstv("image.jpg", "sstv1.wav")
+	
 	
 	send_aprs()
 	# get lan/lot/alt from gps
@@ -211,7 +233,6 @@ while loopcnt < STANDBY_LOOPS:
 		time.sleep(time_delta)
 	else:
 		logging.debug("MC loop took longer that 3 minutes!")
-
 logging.info("MC Mission End!")
 # wait additionally for all TX jobs to terminate
 Transmitter.TXQueue.join()
