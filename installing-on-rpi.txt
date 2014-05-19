@@ -1,6 +1,11 @@
 This document includes the neccesary modifications to a default raspian image
 These will have to be done manually to run the balloon mission software without problems. 
 
+Install a default raspian image
+
+On the first partition, in cmdline.txt
+	remove all references to ttyAMA0
+
 Installing needed software from packet sources
 > sudo apt-get update
 > sudo apt-get install resample imagemagick i2c-tools libi2c-dev gpsd gpsd-clients libsndfile-dev libjpeg-dev
